@@ -177,6 +177,12 @@ int main() {
 			lightingShader.setMat4("model", model);
 			lightingShader.setVec3("viewPos", camera.Position);
 
+			// material properties
+			lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+			lightingShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+			lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+			lightingShader.setFloat("material.shininess", 32.0f);
+
 			// render
 			glBindVertexArray(cubeVAO);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
