@@ -32,6 +32,7 @@ public:
 	vector<Texture> textures_loaded;
 	vector<Mesh> meshes;
 	string directory;
+	string name;
 
 	// translate
 	glm::mat4 model;
@@ -40,7 +41,8 @@ public:
 	glm::vec3 rotate;
 
 	// constructor
-	Model(string const& path) {
+	Model(string const& name, string const& path) {
+		this->name = name;
 		loadModel(path);
 		initModelMatrix();
 	}

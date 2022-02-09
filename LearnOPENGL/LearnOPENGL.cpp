@@ -73,8 +73,8 @@ int main() {
 	Shader lightingShader("color.vert", "color.frag");
 
 	// load models
-//	Model ourModel("resources/objects/backpack/backpack.obj");
-	std::shared_ptr<Model> ourModel = std::make_shared <Model>("resources/objects/suzanne/suzanne.obj");
+	std::shared_ptr<Model> Suzanne = std::make_shared <Model>("suzanne", "resources/objects/suzanne/suzanne.obj");
+	std::shared_ptr<Model> cube = std::make_shared <Model>("cube", "resources/objects/cube/cube.obj");
 
 	// lightCuve
 	Shader lightCubeShader("light_cube.vert", "light_cube.frag");
@@ -142,8 +142,10 @@ int main() {
 
 	// make UIs
 	auto UIs = UIManager(window);
-	auto modelUI = std::make_shared<ModelUI>(ourModel);
+	auto modelUI = std::make_shared<ModelUI>(Suzanne);
+	auto modelUI2 = std::make_shared<ModelUI>(cube);
 	UIs.Add(modelUI);
+	UIs.Add(modelUI2);
 
 	// render loop
 	while (!glfwWindowShouldClose(window))
@@ -202,9 +204,13 @@ int main() {
 			lightingShader.setMat4("view", view);
 
 			// render the loaded model
-			ourModel->Update(lightingShader);
-			ourModel->Draw(lightingShader);
-			
+			Suzanne->Update(lightingShader);
+			Suzanne->Draw(lightingShader);
+
+			lightCubeShader.use();
+			cube->Update(lightCubeShader);
+			cube->Draw(lightCubeShader);
+
 			// also draw the lamp object(s)
 			lightCubeShader.use();
 			lightCubeShader.setMat4("projection", projection);
