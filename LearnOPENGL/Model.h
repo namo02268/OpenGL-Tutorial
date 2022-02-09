@@ -17,11 +17,14 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <map>
 #include <vector>
 using namespace std;
 
 unsigned int TextureFromFile(const char* path, const string& directory);
+
+#define Xaxis glm::vec3(1.0, 0.0, 0.0)
+#define Yaxis glm::vec3(0.0, 1.0, 0.0)
+#define Zaxis glm::vec3(0.0, 0.0, 1.0)
 
 class Model {
 public:
@@ -30,8 +33,28 @@ public:
 	vector<Mesh> meshes;
 	string directory;
 
+	// translate
+	glm::mat4 model;
+	glm::vec3 position;
+	glm::vec3 scale;
+	glm::vec3 rotate;
+
 	// constructor
-	Model(string const& path) { loadModel(path); }
+	Model(string const& path) {
+		loadModel(path);
+		initModelMatrix();
+	}
+
+	// update the model
+	void Update(Shader& shader) {
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, position);
+		model = glm::rotate(model, glm::radians(rotate.x), Xaxis);
+		model = glm::rotate(model, glm::radians(rotate.y), Yaxis);
+		model = glm::rotate(model, glm::radians(rotate.z), Zaxis);
+		model = glm::scale(model, scale);
+		shader.setMat4("model", model);
+	}
 
 	// draws the model
 	void Draw(Shader& shader) {
@@ -40,6 +63,13 @@ public:
 	}
 
 private:
+	void initModelMatrix() {
+		model = glm::mat4(1.0f);
+		position = glm::vec3(0.0f);
+		scale = glm::vec3(1.0f);
+		rotate = glm::vec3(0.0f);
+	}
+
 	// loads a model
 	void loadModel(string const& path) {
 		// read file via ASSIMP
@@ -126,12 +156,13 @@ private:
 		return Mesh(vertices, indices, textures);
 	}
 
-	vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName) {
+	vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName)
+	{
 		vector<Texture> textures;
-		for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
+		for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+		{
 			aiString str;
 			mat->GetTexture(type, i, &str);
-			// check if textures was loaded before
 			bool skip = false;
 			for (unsigned int j = 0; j < textures_loaded.size(); j++) {
 				if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0) {

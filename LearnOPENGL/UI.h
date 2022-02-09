@@ -4,25 +4,34 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
+#include "Model.h"
+
 class UI {
 public:
-	virtual void Update() = 0;
+	virtual void Update(unsigned int& width, unsigned int& height) = 0;
 };
 
-class UI1 : public UI {
+class ModelUI : public UI {
 public:
-	void Update() override {
-		ImGui::Begin("This is UI1");
-		ImGui::Text("This is some useful text.");
-		ImGui::End();
-	}
-};
+	ModelUI(const std::shared_ptr<Model>& model) { this->model = model; }
 
-class UI2 : public UI {
-public:
-	void Update() override {
-		ImGui::Begin("This is UI2");
-		ImGui::Text("This is some useful text.");
+	void Update(unsigned int& width, unsigned int& height) override {
+		ImGui::SetNextWindowPos(ImVec2(width - 300, 0.0));
+		ImGui::SetNextWindowSize(ImVec2(300, height));
+		ImGui::Begin("Model", &open, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+
+		if (ImGui::CollapsingHeader((model->directory).c_str()))
+		{
+			ImGui::Text("Transform");
+			ImGui::DragFloat3("Position", &model->position.x, 0.01f);
+			ImGui::DragFloat3("Scale", &model->scale.x, 0.01f);
+			ImGui::DragFloat3("Rotate", &model->rotate.x, 1.0f);
+		}
+
 		ImGui::End();
 	}
+
+private:
+	std::shared_ptr<Model> model;
+	bool open;
 };
