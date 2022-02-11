@@ -46,7 +46,7 @@ int main() {
 #endif
 
 	// create GLFW window 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "My Engine", NULL, NULL);
 	if (window == NULL) {
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
@@ -68,84 +68,28 @@ int main() {
 
 	// configure global opengl state
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
 	// build and compile shaders
 	Shader lightingShader("color.vert", "color.frag");
-
-	// load models
-	std::shared_ptr<Model> Suzanne = std::make_shared <Model>("suzanne", "resources/objects/suzanne/suzanne.obj");
-	std::shared_ptr<Model> cube = std::make_shared <Model>("cube", "resources/objects/cube/cube.obj");
-
-	// lightCuve
 	Shader lightCubeShader("light_cube.vert", "light_cube.frag");
 
-	float vertices[] = {
-	-0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	-0.5f,  0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-
-	-0.5f, -0.5f,  0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	-0.5f, -0.5f,  0.5f,
-
-	-0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-	-0.5f, -0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-
-	-0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f, -0.5f,  0.5f,
-	-0.5f, -0.5f,  0.5f,
-	-0.5f, -0.5f, -0.5f,
-
-	-0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f, -0.5f,
-	};
-
-	unsigned int lightCubeVBO, lightCubeVAO;
-	glGenVertexArrays(1, &lightCubeVAO);
-	glGenBuffers(1, &lightCubeVBO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, lightCubeVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glBindVertexArray(lightCubeVAO);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	// positions of the point lights
-	auto light1Pos = glm::vec3(0.7f, 0.2f, 2.0f);
-	auto light2Pos = glm::vec3(2.3f, -1.0f, -1.0f);
-	auto light3Pos = glm::vec3(2.0f, 2.0f, 3.0f);
+	// load models
+	std::shared_ptr<Model> Suzanne = std::make_shared <Model>("Suzanne", "resources/objects/Suzanne/Suzanne.obj");
+	std::shared_ptr<Model> Light1 = std::make_shared <Model>("Light1", "resources/objects/cube/cube.obj", glm::vec3(1.0f), glm::vec3(0.1f), glm::vec3(0.0f));
+	std::shared_ptr<Model> Light2 = std::make_shared <Model>("Light2", "resources/objects/cube/cube.obj", glm::vec3(-1.0f), glm::vec3(0.1f), glm::vec3(0.0f));
+	std::shared_ptr<Model> Light3 = std::make_shared <Model>("Light3", "resources/objects/cube/cube.obj", glm::vec3(2.0f), glm::vec3(0.1f), glm::vec3(0.0f));
 
 	// make UIs
 	auto UIs = UIManager(window);
-	auto modelUI = std::make_shared<ModelUI>(Suzanne);
-	auto modelUI2 = std::make_shared<ModelUI>(cube);
-	UIs.Add(modelUI);
-	UIs.Add(modelUI2);
+	auto Suzanne_UI = std::make_shared<ModelUI>(Suzanne);
+	auto Light1_UI = std::make_shared<ModelUI>(Light1);
+	auto Light2_UI = std::make_shared<ModelUI>(Light2);
+	auto Light3_UI = std::make_shared<ModelUI>(Light3);
+	UIs.Add(Suzanne_UI);
+	UIs.Add(Light1_UI);
+	UIs.Add(Light2_UI);
+	UIs.Add(Light3_UI);
 
 	// render loop
 	while (!glfwWindowShouldClose(window))
@@ -173,7 +117,7 @@ int main() {
 			lightingShader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
 			lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
 			// point light 1
-			lightingShader.setVec3("pointLights[0].position", light1Pos);
+			lightingShader.setVec3("pointLights[0].position", Light1->position);
 			lightingShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
 			lightingShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
 			lightingShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
@@ -181,7 +125,7 @@ int main() {
 			lightingShader.setFloat("pointLights[0].linear", 0.09f);
 			lightingShader.setFloat("pointLights[0].quadratic", 0.032f);
 			// point light 2
-			lightingShader.setVec3("pointLights[1].position", light2Pos);
+			lightingShader.setVec3("pointLights[1].position", Light2->position);
 			lightingShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
 			lightingShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
 			lightingShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
@@ -189,7 +133,7 @@ int main() {
 			lightingShader.setFloat("pointLights[1].linear", 0.09f);
 			lightingShader.setFloat("pointLights[1].quadratic", 0.032f);
 			// point light 3
-			lightingShader.setVec3("pointLights[2].position", light3Pos);
+			lightingShader.setVec3("pointLights[2].position", Light3->position);
 			lightingShader.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
 			lightingShader.setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
 			lightingShader.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
@@ -207,34 +151,18 @@ int main() {
 			Suzanne->Update(lightingShader);
 			Suzanne->Draw(lightingShader);
 
-			lightCubeShader.use();
-			cube->Update(lightCubeShader);
-			cube->Draw(lightCubeShader);
-
 			// also draw the lamp object(s)
 			lightCubeShader.use();
 			lightCubeShader.setMat4("projection", projection);
 			lightCubeShader.setMat4("view", view);
-			glBindVertexArray(lightCubeVAO);
 
-			glm::mat4 model;
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, light1Pos);
-			model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
-			lightCubeShader.setMat4("model", model);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
+			Light1->Update(lightCubeShader);
+			Light1->Draw(lightCubeShader);
+			Light2->Update(lightCubeShader);
+			Light2->Draw(lightCubeShader);
+			Light3->Update(lightCubeShader);
+			Light3->Draw(lightCubeShader);
 
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, light2Pos);
-			model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
-			lightCubeShader.setMat4("model", model);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, light3Pos);
-			model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
-			lightCubeShader.setMat4("model", model);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
 
 			// UI
 			UIs.Update(SCR_WIDTH, SCR_HEIGHT);

@@ -25,7 +25,7 @@ public:
 			ImGui::Text("Transform");
 			ImGui::DragFloat3("Position", &model->position.x, 0.01f);
 			ImGui::DragFloat3("Scale", &model->scale.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &model->rotate.x, 1.0f);
+			ImGui::DragFloat3("Rotation", &model->rotation.x, 1.0f);
 		}
 		ImGui::PopID();
 		ImGui::End();

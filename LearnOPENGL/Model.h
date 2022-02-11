@@ -38,22 +38,22 @@ public:
 	glm::mat4 model;
 	glm::vec3 position;
 	glm::vec3 scale;
-	glm::vec3 rotate;
+	glm::vec3 rotation;
 
 	// constructor
-	Model(string const& name, string const& path) {
+	Model(string const& name, string const& path, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f), glm::vec3 rotation = glm::vec3(0.0f)) 
+		: position(position), scale(scale), rotation(rotation) {
 		this->name = name;
 		loadModel(path);
-		initModelMatrix();
 	}
 
 	// update the model
 	void Update(Shader& shader) {
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, position);
-		model = glm::rotate(model, glm::radians(rotate.x), Xaxis);
-		model = glm::rotate(model, glm::radians(rotate.y), Yaxis);
-		model = glm::rotate(model, glm::radians(rotate.z), Zaxis);
+		model = glm::rotate(model, glm::radians(rotation.x), Xaxis);
+		model = glm::rotate(model, glm::radians(rotation.y), Yaxis);
+		model = glm::rotate(model, glm::radians(rotation.z), Zaxis);
 		model = glm::scale(model, scale);
 		shader.setMat4("model", model);
 	}
@@ -65,13 +65,6 @@ public:
 	}
 
 private:
-	void initModelMatrix() {
-		model = glm::mat4(1.0f);
-		position = glm::vec3(0.0f);
-		scale = glm::vec3(1.0f);
-		rotate = glm::vec3(0.0f);
-	}
-
 	// loads a model
 	void loadModel(string const& path) {
 		// read file via ASSIMP
