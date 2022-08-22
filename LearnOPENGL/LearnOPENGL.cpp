@@ -62,57 +62,63 @@ int main() {
 		return -1;
 	}
 
-	// tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-	stbi_set_flip_vertically_on_load(true);
-
 	// configure global opengl state
 	glEnable(GL_DEPTH_TEST);
 
 	// build and compile shaders
-	Shader ourShader("color.vert", "color.frag");
+	Shader shaderRed("UniformBuffer.vert", "red.frag");
+	Shader shaderGreen("UniformBuffer.vert", "green.frag");
+	Shader shaderBlue("UniformBuffer.vert", "blue.frag");
+	Shader shaderYellow("UniformBuffer.vert", "yellow.frag");
 
-	// load models
-	// -----------
-	Model ourModel("resources/objects/backpack/backpack.obj");
+	float cubeVertices[] = {
+		// positions         
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
 
+		-0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
 
-	// render loop
-	while (!glfwWindowShouldClose(window))
-	{
-		// per-frame time logic
-		float currentFrame = static_cast<float>(glfwGetTime());
-		deltaTime = currentFrame - lastFrame;
-		if (deltaTime >= 1.0f / 60.0f) {
-			lastFrame = currentFrame;
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
 
-			// input
-			processInput(window);
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
 
-			// render
-			glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f, -0.5f,
 
-			// enable shader
-			ourShader.use();
+		-0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
+	};
 
-			// view/projection transformations
-			glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-			glm::mat4 view = camera.GetViewMatrix();
-			ourShader.setMat4("projection", projection);
-			ourShader.setMat4("view", view);
-
-			// render the loaded model
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-			model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
-			ourShader.setMat4("model", model);
-			ourModel.Draw(ourShader);
-
-			// swap buffers and poll events
-			glfwSwapBuffers(window);
-			glfwPollEvents();
-		}
-	}
+	// cube VAO
+	unsigned int cubeVAO;
+	glGenVertexArrays(1, &cubeVAO);
 
 	glfwTerminate();
 	return 0;
