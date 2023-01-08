@@ -18,47 +18,32 @@
     <ClCompile Include="LearnOPENGL.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="glad.c">
+    <ClCompile Include="vendor\Glad\glad.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui.cpp">
+    <ClCompile Include="vendor\imgui\imgui.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_demo.cpp">
+    <ClCompile Include="vendor\imgui\imgui_demo.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_draw.cpp">
+    <ClCompile Include="vendor\imgui\imgui_draw.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_impl_glfw.cpp">
+    <ClCompile Include="vendor\imgui\imgui_impl_glfw.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
+    <ClCompile Include="vendor\imgui\imgui_impl_opengl3.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_tables.cpp">
+    <ClCompile Include="vendor\imgui\imgui_tables.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_widgets.cpp">
+    <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Shader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -86,17 +71,59 @@
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
+    <ClInclude Include="src\Camera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="UI_Manager.h">
+    <ClInclude Include="src\Mesh.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI_Manager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imconfig.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imgui.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imgui_impl_glfw.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imgui_impl_opengl3.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imgui_internal.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imstb_rectpack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imstb_textedit.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imstb_truetype.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="color.vert" />
-    <None Include="color.frag" />
-    <None Include="light_cube.vert" />
-    <None Include="light_cube.frag" />
+    <None Include="resources\shaders\color.frag" />
+    <None Include="resources\shaders\color.vert" />
+    <None Include="resources\shaders\light_cube.frag" />
+    <None Include="resources\shaders\light_cube.vert" />
   </ItemGroup>
 </Project>

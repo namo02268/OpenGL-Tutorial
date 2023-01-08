@@ -8,7 +8,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "stb_image/stb_image.h"
 
 #include "Mesh.h"
 #include "Shader.h"

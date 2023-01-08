@@ -71,8 +71,8 @@ int main() {
 	glDepthFunc(GL_LESS);
 
 	// build and compile shaders
-	Shader lightingShader("color.vert", "color.frag");
-	Shader lightCubeShader("light_cube.vert", "light_cube.frag");
+	Shader lightingShader("resources/shaders/color.vert", "resources/shaders/color.frag");
+	Shader lightCubeShader("resources/shaders/light_cube.vert", "resources/shaders/light_cube.frag");
 
 	// load models
 	std::shared_ptr<Model> Suzanne = std::make_shared <Model>("Suzanne", "resources/objects/Suzanne/Suzanne.obj");
